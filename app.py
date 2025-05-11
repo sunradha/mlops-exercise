@@ -4,8 +4,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import LabelEncoder
 
+
 def load_data(filepath):
     return pd.read_csv(filepath)
+
 
 def preprocess_data(data):
     # Convert Date to datetime and extract Year, Month, Day
@@ -22,23 +24,28 @@ def preprocess_data(data):
 
     return data
 
+
 def split_data(data, target_column, test_size=0.2, random_state=42):
     X = data.drop(columns=target_column)
     y = data[target_column]
 
     return train_test_split(X, y, test_size=test_size, random_state=random_state)
 
+
 def train_model(X_train, y_train):
-    model = LogisticRegression()
+    model = LogisticRegression(max_iter=1000)
     model.fit(X_train, y_train)
 
     return model
 
+
 def save_model(model, filepath):
     joblib.dump(model, filepath)
 
-def test_model(model, X_test, y_test):
+
+def evaluate_model(model, X_test, y_test):
     return model.score(X_test, y_test)
+
 
 def main():
     # Load the data
@@ -57,10 +64,11 @@ def main():
     save_model(model, 'models/model.pkl')
 
     # Test the model
-    score = test_model(model, X_test, y_test)
+    score = evaluate_model(model, X_test, y_test)
     # print score is:
     print("Model accuracy is: ", score)
     return score
+
 
 if __name__ == "__main__":
     main()
